@@ -125,10 +125,10 @@ def getSQSMsg():
         logger.debug("No message n the queue")
         return None
     message = response['Messages'][0]
-    #SQS.delete_message(
-    #        QueueUrl=url,
-    #        ReceiptHandle=message['ReceiptHandle']
-    #    )
+    SQS.delete_message(
+            QueueUrl=url,
+            ReceiptHandle=message['ReceiptHandle']
+        )
     logger.debug('Received and deleted message: %s' % response)
     return message
 def query(term):
