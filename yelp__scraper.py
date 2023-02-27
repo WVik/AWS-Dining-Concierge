@@ -117,7 +117,7 @@ def yelp():
         params['term']=cuisine+' dinner'
         params['offset']=0
         count=1000
-        complete_list +=collect2(url,headers,params,count,ids)[0]
+        complete_list +=collect2(url,headers,params,count,ids)[0] #call collect1 and collect2 for elastic search and DynamoDb Data files
         ids += collect2(url,headers,params,count,ids)[1]
         print(len(complete_list))
     return complete_list
