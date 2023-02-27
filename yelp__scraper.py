@@ -43,46 +43,6 @@ def collect(url,headers,params,count,ids):
       time.sleep(random.uniform(0.5, 1.5))
   return [restaurants,ids_type]
 
-def collect2(url,headers,params,count,ids):
-
-  
-  restaurants = []
-  ids_type=ids
-  
-  while len(restaurants) < count and params['offset']<1000:
-
-    # Make a request to the API
-      response = requests.get(url, headers=headers, params=params)
-      data = json.loads(response.text)
-      if 'businesses' not in data.keys():
-        print(data)
-        break
-      for restaurant in data['businesses']:
-        if restaurant['id'] not in ids:
-          ids_type.append(restaurant['id'])
-          #restaurant['cuisine']=params['term']
-          neccessary_info_params=['name']
-          neccessary_info1={"index": {"_index":"restaraunts","_id":restaurant['id']}}
-          neccessary_info={}
-          neccessary_info['business-id']=str(restaurant['id'])
-          neccessary_info['cuisine']=params['term'].split(" ")[0]
-          for nec_param in neccessary_info_params:
-            if nec_param in restaurant.keys():
-              neccessary_info[nec_param]=str(restaurant[nec_param])
-          restaurants.append(neccessary_info1)
-          restaurants.append(neccessary_info)
-          #restaurants.append(restaurant)
-    
-    # Add the businesses to the list of restaurants
-     # restaurants += data['businesses']
-    
-    # Increase the offset to get the next page of results
-      params['offset'] += params['limit']
-    
-    # Wait for a random amount of time to avoid overloading the API
-      time.sleep(random.uniform(0.5, 1.5))
-  return [restaurants,ids_type]
-
 def insert_data(data_list, db=None, table='yelp-diners'):
     if not db:
         db = boto3.resource('dynamodb')
@@ -125,10 +85,10 @@ def yelp():
 
 if __name__ == "__main__":
   data=yelp()
-  with open("rest_final_elast.json",'w') as f:
-    for d in data:
-      json.dump(data,f)
-      f.write('\n')
+  with open("rest_final.json",'w') as f:
+    
+    json.dump(data,f)
+      
   #print(len(data))
   #insert_data(data)
 
